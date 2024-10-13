@@ -1,0 +1,18 @@
+
+components:
+
+- name: cnpg
+  version: 1.0.1
+  suspended: true
+  source:
+    defaultVersion: 0.21.3
+    allowedVersions:
+      - 0.21.2
+      - 0.21.3
+      - 0.21.4
+      - 0.21.5
+    helmRepository:
+      url: https://cloudnative-pg.github.io/charts
+      chart: cloudnative-pg
+  allowCreateNamespace: true
+
