@@ -1,0 +1,35 @@
+
+
+compositions:
+
+  - name: cert/cert-manager
+    version: 1.0.0
+    parameters:
+      namespace: cert-manager
+    template: |
+      releases:
+
+        - name: cert-manager-main
+          component:
+            name: cert/cert-manager
+            version: 1.0.0
+          namespace: {{ .Parameters.namespace }}
+
+        - name: cert-manager-trust
+          component:
+            name: cert/trust-manager
+            version: 1.0.0
+            parameters:
+              trustNamespace: {{ .Parameters.namespace }}
+          namespace:  {{ .Parameters.namespace }}
+          dependsOn:
+            - {{ .Meta.deployment.name }}-main
+
+        - name: cert-manager-issuers
+          component:
+            name: cert/issuers
+            version: 1.0.0
+          namespace:  {{ .Parameters.namespace }}
+          dependsOn:
+            - {{ .Meta.deployment.name }}-trust
+

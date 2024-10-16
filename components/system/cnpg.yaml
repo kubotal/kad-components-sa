@@ -2,8 +2,11 @@
 components:
 
 - name: cnpg
-  version: 1.0.1
-  suspended: true
+  version: 1.0.0
+  suspended: false
+  config:
+    install:
+      createNamespace: true
   source:
     defaultVersion: 0.21.3
     allowedVersions:

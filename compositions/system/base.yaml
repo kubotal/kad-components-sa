@@ -1,0 +1,18 @@
+
+compositions:
+
+  - name: system-base
+    version: 1.0.0
+    template: |
+      deployments:
+      - name: cert-manager
+        composition:
+          name: cert/cert-manager
+          version: 1.0.0
+
+      - name: ingress
+        composition:
+          name: ingress
+          version: 1.0.0
+
+

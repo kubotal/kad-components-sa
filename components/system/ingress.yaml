@@ -1,0 +1,41 @@
+components:
+
+  - name: ingress/ingress-nginx
+    version: 1.0.0
+    config:
+      timeout: 1m
+      install:
+        createNamespace: true
+        remediation:
+          retries: 30
+          remediateLastFailure: true
+      upgrade:
+        remediation:
+          retries: 30
+          remediateLastFailure: true
+    source:
+      defaultVersion: 4.10.0
+      helmRepository:
+        url: https://kubernetes.github.io/ingress-nginx
+        chart: ingress-nginx
+    values: |
+      controller:
+        service:
+          annotations:
+            metallb.universe.tf/loadBalancerIPs: {{ resolveDNS .Context.ingress.url }}
+            metallb.universe.tf/allow-shared-ip: "ingress"
+        extraArgs:
+          enable-ssl-passthrough: true
+
+  - name: ingress/kubernetes
+    version: 1.0.0
+    source:
+      defaultVersion: 0.1.0
+      gitRepository:
+        name: kad-components
+        path: ./charts/ingress-kubernetes/{version}
+    values: |
+      kubernetes:
+        enabled: {{ .Context.ingress.kubernetes.enabled }}
+        host: kubernetes.{{ .Context.ingress.url }}
+      

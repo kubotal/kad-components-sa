@@ -1,0 +1,70 @@
+
+
+components:
+
+  - name: openldap
+    version: 1.0.0
+    parameters:
+      replicaCount: 3
+      ldapDomain: # TBD (i.e: example.com)
+      adminUser: admin
+      adminPassword: # TBD
+      configUser: "admin"
+      configPassword: # TBD
+    config:
+      source:
+        interval: "2m"
+      timeout:  "5m"
+      install:
+        createNamespace: true
+        remediation:
+          retries: 30
+          remediateLastFailure: true
+      upgrade:
+        remediation:
+          retries: 30
+          remediateLastFailure: true
+    source:
+      defaultVersion: 4.2.2
+      gitRepository:
+        name: kad-components
+        path: ./charts/openldap/{version}/
+    values: |
+      openldap-stack-ha:
+        replicaCount: {{ default 2 .Context.openldap.replicaCount }}
+        replication:
+          enabled: {{ if ne .Context.openldap.replicaCount 1 }}true{{else}}false{{end}}
+        clusterIssuer: {{ .Context.certificateIssuer.public }}
+        global:
+          ldapDomain: {{ .Parameters.ldapDomain }}
+          adminUser: {{ .Parameters.adminUser }}
+          adminPassword: {{ .Parameters.adminPassword }}
+          configUser: {{ .Parameters.configUser }}
+          configPassword: {{ .Parameters.configPassword }}
+        initTLSSecret:
+          tls_enabled: true
+          secret: {{ .Meta.release.name }}-cert    
+        persistence:
+          storageClass: {{ .Context.storageClass.data }}
+        phpldapadmin:
+          ingress:
+            annotations:
+              cert-manager.io/cluster-issuer:  {{ .Context.certificateIssuer.public }}
+            hosts:
+              - phpldapadmin.{{ .Context.ingress.url }}
+            tls:
+              - hosts:
+                  - phpldapadmin.{{ .Context.ingress.url }}
+                secretName: phpldapadmin-tls
+        service:
+          {{ $ldap := printf "ldap.%s" .Context.cluster.domain }}
+          annotations:
+            metallb.universe.tf/loadBalancerIPs: {{ resolveDNS $ldap }}
+          hosts:
+            - {{ $ldap }}
+
+        # Custom openldap configuration files used to override default settings
+        # DO NOT FORGET to put the Root Organisation object as it won't be created while using customLdifFiles
+        # To generate passwords: 'slappasswd -s myPassword' on an ldap node
+        customLdifFiles:
+          {{ toYaml .Context.openldap.customLdifFiles | nindent 10 }}

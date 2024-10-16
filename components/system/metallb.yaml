@@ -1,0 +1,37 @@
+
+
+components:
+
+  - name: ingress/metallb
+    version: 1.0.0
+    config:
+      install:
+        createNamespace: true
+    source:
+      defaultVersion: 0.14.4
+      helmRepository:
+        url: https://metallb.github.io/metallb
+        chart: metallb
+
+  - name: ingress/metallb-pool
+    version: 1.0.0
+    config:
+      timeout: 1m
+      install:
+        createNamespace: true
+        remediation:
+          retries: 30
+          remediateLastFailure: true
+      upgrade:
+        remediation:
+          retries: 30
+          remediateLastFailure: true
+    source:
+      defaultVersion: 0.1.0
+      gitRepository:
+        name: kad-components
+        path: ./charts/metallb-pool/{version}
+    values: |
+      ipRanges:
+        - first: {{ resolveDNS (printf "first.pool.%s" .Context.cluster.domain) }}
+          last: {{ resolveDNS (printf "last.pool.%s" .Context.cluster.domain) }}

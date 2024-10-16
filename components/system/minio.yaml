@@ -1,0 +1,110 @@
+
+
+components:
+
+  - name: minio
+    version: 1.0.0
+    parameters:
+      rootUser: TBD
+      rootPassword: TBD
+      storage:
+        driveSize: TBD
+        replicas: TBD
+        drivesPerNode: 1
+        pools: 1
+      ingressName: TBD
+      ingressUnsec:
+        enabled: false
+        host: # TBD if enabled
+      ldap:
+    config:
+      source:
+        interval: "2m"
+      timeout:  "5m"
+      install:
+        createNamespace: true
+        remediation:
+          retries: 30
+          remediateLastFailure: true
+      upgrade:
+        remediation:
+          retries: 30
+          remediateLastFailure: true
+    source:
+      defaultVersion: 5.2.0
+      allowedVersions:
+        - 5.2.0
+      gitRepository:
+        name: kad-components
+        path: ./charts/minio/{version}/
+    allowValues: true
+    values: |
+      {{- if dig "kyverno" "namespace" "" .Context }}
+      kyverno:
+        namespace: {{ .Context.kyverno.namespace }}
+      {{- end }}
+      minio:
+        rootUser: {{ .Parameters.rootUser }}
+        rootPassword: {{ .Parameters.rootPassword }}
+        clusterIssuer: {{ .Context.certificateIssuer.internal }}
+        tls:
+          enabled: true
+        persistence:
+          storageClass: {{ .Context.storageClass.data }}
+          size: {{ .Parameters.storage.driveSize }}
+        drivesPerNode: {{ .Parameters.storage.drivesPerNode }}
+        replicas: {{ .Parameters.storage.replicas }}
+        mode: {{ if ne .Parameters.storage.replicas 1 }}distributed{{else}}standalone{{end}}
+        pools: {{ .Parameters.storage.pools }}
+        ingress:
+          hosts:
+            - {{ required ".Parameters.ingressName is required" .Parameters.ingressName }}.{{ .Context.ingress.url }}
+        consoleIngress:
+          annotations:
+            cert-manager.io/cluster-issuer: {{ .Context.certificateIssuer.public }}
+          hosts:
+            - {{ .Parameters.ingressName}}-console.{{ .Context.ingress.url }}
+          tls:
+            - secretName: {{ .Meta.release.name }}-console-tls
+              hosts:
+                - {{ .Parameters.ingressName}}-console.{{ .Context.ingress.url }}
+        ingressExt:
+          enabled: {{ ne .Context.certificateIssuer.public .Context.certificateIssuer.internal }}
+          clusterIssuer: {{ .Context.certificateIssuer.public }}
+          host: {{ .Parameters.ingressName }}-ext.{{ .Context.ingress.url }}
+        {{- if .Parameters.ingressUnsec.enabled }}
+        ingressUnsec:
+          enabled: true
+          host: {{ .Parameters.ingressName }}-unsec.{{ .Context.ingress.url }}
+        {{- end }}
+        {{- if and .Parameters.topology .Context.minio }}
+        {{- if .Context.minio.topologies }}
+        {{- $topology := get .Context.minio.topologies .Parameters.topology }}
+        topologySpreadConstraints:
+          - maxSkew: 1
+            whenUnsatisfiable: DoNotSchedule
+            topologyKey: "{{ $topology.topologyKey }}"
+            #nodeAffinityPolicy: Honor
+            labelSelector:
+              matchLabels:
+                app: minio
+            #matchLabelKeys:
+            #  - controller-revision-hash
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: "{{ $topology.topologyKey }}"
+                      operator: In
+                      values:
+                        {{- toYaml $topology.zones | nindent 24 }}
+        {{- end }}
+        {{- end }}
+        {{- if .Parameters.ldap }}
+        {{- toYaml (get .Context.minio.ldapSettings  .Parameters.ldap ) | nindent 2 }}
+        {{- end }}
+      
+        users: []
+
+

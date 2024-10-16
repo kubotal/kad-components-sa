@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "namespace",
+    "capacityGb",
+    "ingressName"
+  ],
+  "properties": {
+    "namespace": {
+      "type": "string"
+    },
+    "capacityGb": {
+      "type": "integer"
+    },
+    "ingressName": {
+      "type": "string"
+    },
+    "ingressUnsec": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true,a secondary ingress will be created with non-ssl protocol. Use with care!"
+    },
+    "ldap": {
+      "type": "string"
+    },
+    "dependsOn": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

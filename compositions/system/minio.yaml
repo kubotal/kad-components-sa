@@ -1,0 +1,100 @@
+
+
+compositions:
+
+  - name: minio-1pool-of-1drive
+    version: 1.0.0
+    parameters:
+      namespace: # TBD
+      storage:
+        driveSize: # TBD
+        replicas:  # TBD Must be 1 or multiple of 4
+      ingressName: # TBD
+      ingressUnsec: false
+      ldap: # MBD (May Be Defined)
+      releaseName: TBD
+      dependsOn: []
+    template: |
+      releases:
+      - name: {{ .Parameters.releaseName }}
+        namespace: {{ .Parameters.namespace }}
+        component: 
+          name: minio
+          version: 1.0.0
+          parameters:
+            rootUser: minio
+            rootPassword: minio123
+            storage:
+              driveSize: {{ .Parameters.storage.driveSize }}
+              replicas: {{ .Parameters.storage.replicas }}
+              drivesPerNode: 1
+              pools: 1
+            ingressName: {{ .Parameters.ingressName }}
+            ingressUnsec:
+              enabled: {{ .Parameters.ingressUnsec }}
+            ldap: {{ .Parameters.ldap }}
+          values:
+            minio:
+              resources:
+                requests:
+                  memory: "2Gi"
+                  cpu: "250m"
+        dependsOn: 
+          {{ toYaml (concat (list "ingress-nginx") .Parameters.dependsOn) | nindent 4 }}
+
+  - name: minio-1
+    version: 1.0.0
+    parameters:
+      namespace: # TBD
+      capacityGb: # TBD
+      ingressName: # TBD
+      ingressUnsec: false
+      ldap: # MBD (May Be Defined)
+      dependsOn: []
+    schema:
+      file: ./minio-x.json
+    template: |
+      deployments:
+      - name: {{ .Meta.deployment.name }}-1
+        composition: 
+          name: minio-1pool-of-1drive
+          version: 1.0.0
+          parameters:
+            releaseName: {{ .Meta.deployment.name }}
+            namespace: {{ .Parameters.namespace }}
+            storage:
+              replicas: 1
+              driveSize: {{ .Parameters.capacityGb }}G
+            ingressName: {{ .Parameters.ingressName }}
+            ingressUnsec: {{ .Parameters.ingressUnsec }}
+            ldap: {{ .Parameters.ldap }}
+            dependsOn: {{ .Parameters.dependsOn }}
+
+  - name: minio-4
+    version: 1.0.0
+    parameters:
+      namespace: # TBD
+      capacityGb: # TBD
+      ingressName: # TBD
+      ingressUnsec: false
+      ldap: # MBD (May Be Defined)
+      dependsOn: []
+    schema:
+      file: ./minio-x.json
+    template: |
+      deployments:
+      - name: {{ .Meta.deployment.name }}-4
+        composition: 
+          name: minio-1pool-of-1drive
+          version: 1.0.0
+          parameters:
+            releaseName: {{ .Meta.deployment.name }}
+            namespace: {{ .Parameters.namespace }}
+            storage:
+              replicas: 4
+              driveSize: {{ div .Parameters.capacityGb 2 }}G
+            ingressName: {{ .Parameters.ingressName }}
+            ingressUnsec: {{ .Parameters.ingressUnsec }}
+            ldap: {{ .Parameters.ldap }}
+            dependsOn: {{ .Parameters.dependsOn }}
+
