@@ -23,7 +23,7 @@
       "description": "If true,a secondary ingress will be created with non-ssl protocol. Use with care!"
     },
     "ldap": {
-      "type": "string"
+      "type": [ "string", "null" ]
     },
     "dependsOn": {
       "type": "array",
