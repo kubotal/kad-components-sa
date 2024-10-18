@@ -5,7 +5,9 @@
   "required": [
     "namespace",
     "capacityGb",
-    "ingressName"
+    "ingressName",
+    "rootUser",
+    "rootPassword"
   ],
   "properties": {
     "namespace": {
@@ -17,6 +19,12 @@
     "ingressName": {
       "type": "string"
     },
+    "rootUser": {
+      "type": "string"
+    },
+    "rootPassword": {
+      "type": "string"
+    },
     "ingressUnsec": {
       "type": "boolean",
       "default": false,
@@ -24,6 +32,22 @@
     },
     "ldap": {
       "type": [ "string", "null" ]
+    },
+    "admin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rootUser",
+        "rootPassword"
+      ],
+      "properties": {
+        "rootUser": {
+          "type": "string"
+        },
+        "rootPassword": {
+          "type": "string"
+        }
+      }
     },
     "dependsOn": {
       "type": "array",

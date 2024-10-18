@@ -11,6 +11,8 @@ compositions:
         replicas:  # TBD Must be 1 or multiple of 4
       ingressName: # TBD
       ingressUnsec: false
+      rootUser: TBD
+      rootPassword: TBD
       ldap: # MBD (May Be Defined)
       releaseName: TBD
       dependsOn: []
@@ -22,8 +24,8 @@ compositions:
           name: minio
           version: 1.0.0
           parameters:
-            rootUser: minio
-            rootPassword: minio123
+            rootUser: {{ .Parameters.rootUser }}
+            rootPassword: {{ .Parameters.rootPassword }}
             storage:
               driveSize: {{ .Parameters.storage.driveSize }}
               replicas: {{ .Parameters.storage.replicas }}
@@ -49,6 +51,9 @@ compositions:
       capacityGb: # TBD
       ingressName: # TBD
       ingressUnsec: false
+      admin:
+        rootUser: TBD
+        rootPassword: TBD
       ldap: # MBD (May Be Defined)
       dependsOn: []
     schema:
@@ -60,6 +65,8 @@ compositions:
           name: minio-1pool-of-1drive
           version: 1.0.0
           parameters:
+            rootUser: {{ .Parameters.admin.rootUser }}
+            rootPassword: {{ .Parameters.admin.rootPassword }}
             releaseName: {{ .Meta.deployment.name }}
             namespace: {{ .Parameters.namespace }}
             storage:
@@ -77,6 +84,9 @@ compositions:
       capacityGb: # TBD
       ingressName: # TBD
       ingressUnsec: false
+      admin:
+        rootUser: TBD
+        rootPassword: TBD
       ldap: # MBD (May Be Defined)
       dependsOn: []
     schema:
@@ -88,6 +98,8 @@ compositions:
           name: minio-1pool-of-1drive
           version: 1.0.0
           parameters:
+            rootUser: {{ .Parameters.admin.rootUser }}
+            rootPassword: {{ .Parameters.admin.rootPassword }}
             releaseName: {{ .Meta.deployment.name }}
             namespace: {{ .Parameters.namespace }}
             storage:
