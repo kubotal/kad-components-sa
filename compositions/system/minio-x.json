@@ -6,8 +6,7 @@
     "namespace",
     "capacityGb",
     "ingressName",
-    "rootUser",
-    "rootPassword"
+    "admin"
   ],
   "properties": {
     "namespace": {
