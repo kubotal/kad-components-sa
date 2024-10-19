@@ -18,7 +18,7 @@ compositions:
       dependsOn: []
     template: |
       releases:
-      - name: {{ .Parameters.releaseName }}
+      - name: {{ .Parameters.releaseName }
         namespace: {{ .Parameters.namespace }}
         component: 
           name: minio
