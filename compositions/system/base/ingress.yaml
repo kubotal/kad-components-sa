@@ -4,7 +4,7 @@ compositions:
 
   - name: ingress
     version: 1.0.0
-    template: |
+    body: |
       releases:
       - name: metallb
         namespace: metallb

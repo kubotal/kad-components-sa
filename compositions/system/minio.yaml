@@ -16,7 +16,7 @@ compositions:
       ldap: # MBD (May Be Defined)
       releaseName: TBD
       dependsOn: []
-    template: |
+    body: |
       releases:
       - name: {{ .Parameters.releaseName }}
         namespace: {{ .Parameters.namespace }}

@@ -3,7 +3,7 @@ compositions:
 
   - name: system-base
     version: 1.0.0
-    template: |
+    body: |
       deployments:
       - name: cert-manager
         composition:

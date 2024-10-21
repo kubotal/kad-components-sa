@@ -38,7 +38,7 @@ compositions:
             }
           }
         }
-    template: |
+    body: |
       
       releases:
 
