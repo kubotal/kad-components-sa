@@ -58,7 +58,7 @@ compositions:
       dependsOn: []
     schema:
       file: ./minio-x.json
-    template: |
+    body: |
       deployments:
       - name: {{ .Meta.deployment.name }}-1
         composition: 
