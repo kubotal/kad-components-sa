@@ -93,14 +93,14 @@ templates:
       file: ./minio-x.json
     body: |
       templateReleases:
-      - name: {{ .Meta.templateReleases.name }}-4
+      - name: {{ .Meta.templateRelease.name }}-4
         template: 
           name: minio-1pool-of-1drive
           version: 1.0.0
           parameters:
             rootUser: {{ .Parameters.admin.rootUser }}
             rootPassword: {{ .Parameters.admin.rootPassword }}
-            releaseName: {{ .Meta.templateReleases.name }}
+            releaseName: {{ .Meta.templateRelease.name }}
             namespace: {{ .Parameters.namespace }}
             storage:
               replicas: 4
