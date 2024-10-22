@@ -7,7 +7,7 @@ templates:
     parameters:
       namespace: cert-manager
     body: |
-      releases:
+      componentReleases:
 
         - name: cert-manager-main
           component:

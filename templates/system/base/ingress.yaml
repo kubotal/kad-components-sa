@@ -5,7 +5,7 @@ templates:
   - name: ingress
     version: 1.0.0
     body: |
-      releases:
+      componentReleases:
       - name: metallb
         namespace: metallb
         component:

@@ -43,7 +43,7 @@ components:
           configPassword: {{ .Parameters.configPassword }}
         initTLSSecret:
           tls_enabled: true
-          secret: {{ .Meta.release.name }}-cert    
+          secret: {{ .Meta.componentRelease.name }}-cert    
         persistence:
           storageClass: {{ .Context.storageClass.data }}
         phpldapadmin:

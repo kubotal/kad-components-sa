@@ -40,7 +40,7 @@ templates:
         }
     body: |
       
-      releases:
+      componentsRelease:
 
       {{- if .Parameters.reloader }}
       - name: tools-reloader

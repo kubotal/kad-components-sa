@@ -65,7 +65,7 @@ components:
           hosts:
             - {{ .Parameters.ingressName}}-console.{{ .Context.ingress.url }}
           tls:
-            - secretName: {{ .Meta.release.name }}-console-tls
+            - secretName: {{ .Meta.componentRelease.name }}-console-tls
               hosts:
                 - {{ .Parameters.ingressName}}-console.{{ .Context.ingress.url }}
         ingressExt:

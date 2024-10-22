@@ -17,7 +17,7 @@ templates:
       releaseName: TBD
       dependsOn: []
     body: |
-      releases:
+      componentReleases:
       - name: {{ .Parameters.releaseName }}
         namespace: {{ .Parameters.namespace }}
         component: 
