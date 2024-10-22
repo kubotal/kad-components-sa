@@ -61,7 +61,7 @@ templates:
     body: |
       deployments:
       - name: {{ .Meta.deployment.name }}-1
-        templates: 
+        template: 
           name: minio-1pool-of-1drive
           version: 1.0.0
           parameters:
@@ -91,10 +91,10 @@ templates:
       dependsOn: []
     schema:
       file: ./minio-x.json
-    template: |
+    body: |
       deployments:
       - name: {{ .Meta.deployment.name }}-4
-        templates: 
+        template: 
           name: minio-1pool-of-1drive
           version: 1.0.0
           parameters:

@@ -6,12 +6,12 @@ templates:
     body: |
       deployments:
       - name: cert-manager
-        templates:
+        template:
           name: cert/cert-manager
           version: 1.0.0
 
       - name: ingress
-        templates:
+        template:
           name: ingress
           version: 1.0.0
 
