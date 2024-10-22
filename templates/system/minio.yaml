@@ -1,6 +1,6 @@
 
 
-compositions:
+templates:
 
   - name: minio-1pool-of-1drive
     version: 1.0.0
@@ -61,7 +61,7 @@ compositions:
     body: |
       deployments:
       - name: {{ .Meta.deployment.name }}-1
-        composition: 
+        templates: 
           name: minio-1pool-of-1drive
           version: 1.0.0
           parameters:
@@ -94,7 +94,7 @@ compositions:
     template: |
       deployments:
       - name: {{ .Meta.deployment.name }}-4
-        composition: 
+        templates: 
           name: minio-1pool-of-1drive
           version: 1.0.0
           parameters:

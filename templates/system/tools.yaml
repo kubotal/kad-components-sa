@@ -1,6 +1,6 @@
 
 
-compositions:
+templates:
 
   - name: tools
     version: 1.0.0

@@ -1,17 +1,17 @@
 
-compositions:
+templates:
 
   - name: system-base
     version: 1.0.0
     body: |
       deployments:
       - name: cert-manager
-        composition:
+        templates:
           name: cert/cert-manager
           version: 1.0.0
 
       - name: ingress
-        composition:
+        templates:
           name: ingress
           version: 1.0.0
 

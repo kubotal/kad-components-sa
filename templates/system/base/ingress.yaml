@@ -1,6 +1,6 @@
 
 
-compositions:
+templates:
 
   - name: ingress
     version: 1.0.0

@@ -1,6 +1,6 @@
 
 
-compositions:
+templates:
 
   - name: cert/cert-manager
     version: 1.0.0
