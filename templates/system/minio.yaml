@@ -59,15 +59,15 @@ templates:
     schema:
       file: ./minio-x.json
     body: |
-      deployments:
-      - name: {{ .Meta.deployment.name }}-1
+      templateReleases:
+      - name: {{ .Meta.templateReleases.name }}-1
         template: 
           name: minio-1pool-of-1drive
           version: 1.0.0
           parameters:
             rootUser: {{ .Parameters.admin.rootUser }}
             rootPassword: {{ .Parameters.admin.rootPassword }}
-            releaseName: {{ .Meta.deployment.name }}
+            releaseName: {{ .Meta.templateReleases.name }}
             namespace: {{ .Parameters.namespace }}
             storage:
               replicas: 1
@@ -92,15 +92,15 @@ templates:
     schema:
       file: ./minio-x.json
     body: |
-      deployments:
-      - name: {{ .Meta.deployment.name }}-4
+      templateReleases:
+      - name: {{ .Meta.templateReleases.name }}-4
         template: 
           name: minio-1pool-of-1drive
           version: 1.0.0
           parameters:
             rootUser: {{ .Parameters.admin.rootUser }}
             rootPassword: {{ .Parameters.admin.rootPassword }}
-            releaseName: {{ .Meta.deployment.name }}
+            releaseName: {{ .Meta.templateReleases.name }}
             namespace: {{ .Parameters.namespace }}
             storage:
               replicas: 4

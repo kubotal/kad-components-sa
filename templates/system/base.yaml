@@ -4,7 +4,7 @@ templates:
   - name: system-base
     version: 1.0.0
     body: |
-      deployments:
+      templateReleases:
       - name: cert-manager
         template:
           name: cert/cert-manager

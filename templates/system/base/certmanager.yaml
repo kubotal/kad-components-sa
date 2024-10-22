@@ -23,7 +23,7 @@ templates:
               trustNamespace: {{ .Parameters.namespace }}
           namespace:  {{ .Parameters.namespace }}
           dependsOn:
-            - {{ .Meta.deployment.name }}-main
+            - {{ .Meta.templateReleases.name }}-main
 
         - name: cert-manager-issuers
           component:
@@ -31,5 +31,5 @@ templates:
             version: 1.0.0
           namespace:  {{ .Parameters.namespace }}
           dependsOn:
-            - {{ .Meta.deployment.name }}-trust
+            - {{ .Meta.templateReleases.name }}-trust
 
