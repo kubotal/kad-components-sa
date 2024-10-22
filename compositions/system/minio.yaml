@@ -91,7 +91,7 @@ compositions:
       dependsOn: []
     schema:
       file: ./minio-x.json
-    body: |
+    template: |
       deployments:
       - name: {{ .Meta.deployment.name }}-4
         composition: 
