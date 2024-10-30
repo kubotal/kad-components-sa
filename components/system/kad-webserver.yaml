@@ -22,6 +22,8 @@ components:
         level: debug
       image:
         pullPolicy: Always
+      webConfig:
+        refreshPeriod: 1m
       {{- end }}
 
 

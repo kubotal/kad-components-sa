@@ -15,6 +15,7 @@ components:
       chart: cert-manager
   values:
     installCRDs: true
+    enableCertificateOwnerRef: true
 
 - name: cert/trust-manager
   version: 1.0.0
