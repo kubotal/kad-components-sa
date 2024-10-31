@@ -9,13 +9,13 @@ templates:
       - name: metallb
         namespace: metallb
         component:
-          name: ingress/metallb
+          name: ingress:metallb
           version: 1.0.0
       
       - name: metallb-pool
         namespace: metallb
         component:
-          name: ingress/metallb-pool
+          name: ingress:metallb-pool
           version: 1.0.0
         dependsOn:
         - metallb
@@ -23,7 +23,7 @@ templates:
       - name: ingress-nginx
         namespace: ingress-nginx
         component:
-          name: ingress/ingress-nginx
+          name: ingress:ingress-nginx
           version: 1.0.0
         dependsOn:
         - cert-manager-main
@@ -33,7 +33,7 @@ templates:
       - name: ingress-kubernetes
         namespace: ingress-nginx
         component: 
-          name: ingress/kubernetes
+          name: ingress:kubernetes
           version: 1.0.0
         dependsOn:
         - ingress-nginx

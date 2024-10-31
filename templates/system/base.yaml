@@ -7,7 +7,7 @@ templates:
       templateReleases:
       - name: cert-manager
         template:
-          name: cert/cert-manager
+          name: cert:cert-manager
           version: 1.0.0
 
       - name: ingress

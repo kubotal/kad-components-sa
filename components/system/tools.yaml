@@ -2,7 +2,7 @@
 
 components:
 
-  - name: tools/reloader
+  - name: tools:reloader
     version: 1.0.0
     config:
       install:
@@ -25,7 +25,7 @@ components:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
 
-  - name: tools/replicator
+  - name: tools:replicator
     version: 1.0.0
     config:
       install:
@@ -60,7 +60,7 @@ components:
         #  failureThreshold: 3
         #  successThreshold: 1
 
-  - name: tools/secret-generator
+  - name: tools:secret-generator
     version: 1.0.0
     config:
       install:

@@ -46,7 +46,7 @@ templates:
       - name: tools-reloader
         namespace: {{ .Parameters.namespace }}
         component:
-          name: tools/reloader
+          name: tools:reloader
           version: 1.0.0
       {{- end }}
 
@@ -54,7 +54,7 @@ templates:
       - name: tools-replicator
         namespace: {{ .Parameters.namespace }}
         component:
-          name: tools/replicator
+          name: tools:replicator
           version: 1.0.0
       {{- end }}
 
@@ -62,7 +62,7 @@ templates:
       - name: tools-secret-generator
         namespace: {{ .Parameters.namespace }}
         component:
-          name: tools/secret-generator
+          name: tools:secret-generator
           version: 1.0.0
       {{- end }}
 

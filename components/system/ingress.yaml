@@ -1,6 +1,6 @@
 components:
 
-  - name: ingress/ingress-nginx
+  - name: ingress:ingress-nginx
     version: 1.0.0
     config:
       timeout: 1m
@@ -27,7 +27,7 @@ components:
         extraArgs:
           enable-ssl-passthrough: true
 
-  - name: ingress/kubernetes
+  - name: ingress:kubernetes
     version: 1.0.0
     source:
       defaultVersion: 0.1.0

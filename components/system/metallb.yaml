@@ -2,7 +2,7 @@
 
 components:
 
-  - name: ingress/metallb
+  - name: ingress:metallb
     version: 1.0.0
     config:
       install:
@@ -13,7 +13,7 @@ components:
         url: https://metallb.github.io/metallb
         chart: metallb
 
-  - name: ingress/metallb-pool
+  - name: ingress:metallb-pool
     version: 1.0.0
     config:
       timeout: 1m

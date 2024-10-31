@@ -2,7 +2,7 @@
 
 components:
 
-- name: cert/cert-manager
+- name: cert:cert-manager
   version: 1.0.0
   protected: true
   config:
@@ -17,7 +17,7 @@ components:
     installCRDs: true
     enableCertificateOwnerRef: true
 
-- name: cert/trust-manager
+- name: cert:trust-manager
   version: 1.0.0
   parameters:
     trustNamespace: # TBD
@@ -33,7 +33,7 @@ components:
     secretTargets:
       enabled: false
 
-- name: cert/issuers
+- name: cert:issuers
   version: 1.0.0
   source:
     defaultVersion: 0.1.0
