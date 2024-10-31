@@ -1,0 +1,24 @@
+templates:
+
+
+  - name: minio-1
+    version: 2.0.0
+    parameters:
+      namespace: # TBD
+      capacityGb: # TBD
+      ingressName: # TBD
+      ingressUnsec: false
+      admin:
+        rootUser: TBD
+        rootPassword: TBD
+      ldap: # MBD (May Be Defined)
+      dependsOn: []
+    schema:
+      file: ./minio-x.json
+    body: |
+      templateReleases:
+      - name: {{ .Meta.templateRelease.name }}-1
+        template:
+          name: minio-1pool-of-1drive
+          version: 1.0.0
+
