@@ -3,7 +3,6 @@ components:
 
   - name: kad-webserver
     version: 1.0.0
-    protected: true
     source:
       defaultVersion: 0.4.0-snapshot
       ociRepository:

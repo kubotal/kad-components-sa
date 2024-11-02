@@ -4,7 +4,6 @@ components:
 
 - name: cert:cert-manager
   version: 1.0.0
-  protected: true
   config:
     install:
       createNamespace: true

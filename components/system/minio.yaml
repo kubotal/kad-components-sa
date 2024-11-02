@@ -4,6 +4,7 @@ components:
 
   - name: minio
     version: 1.0.0
+    protected: true
     parameters:
       rootUser: TBD
       rootPassword: TBD
