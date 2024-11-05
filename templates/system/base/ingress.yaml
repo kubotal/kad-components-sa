@@ -32,7 +32,7 @@ templates:
       {{- if .Context.ingress.kubernetes.enabled }}
       - name: ingress-kubernetes
         namespace: ingress-nginx
-        component: 
+        component:
           name: ingress:kubernetes
           version: 1.0.0
         dependsOn:
