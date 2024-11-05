@@ -34,7 +34,7 @@ components:
     source:
       defaultVersion: 5.2.0
       allowedVersions:
-        - 5.2.0
+        - 5.2.0x
       gitRepository:
         name: kad-components
         path: ./charts/minio/{version}/
