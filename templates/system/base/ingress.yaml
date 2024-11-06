@@ -17,17 +17,12 @@ templates:
         component:
           name: ingress:metallb-pool
           version: 1.0.0
-        dependsOn:
-        - metallb
 
       - name: ingress-nginx
         namespace: ingress-nginx
         component:
           name: ingress:ingress-nginx
           version: 1.0.0
-        dependsOn:
-        - cert-manager-main
-        - metallb-pool    # Otherwise, will fail, due to ingress probing
       
       {{- if .Context.ingress.kubernetes.enabled }}
       - name: ingress-kubernetes
@@ -35,6 +30,4 @@ templates:
         component:
           name: ingress:kubernetes
           version: 1.0.0
-        dependsOn:
-        - ingress-nginx
       {{- end }}

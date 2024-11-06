@@ -39,6 +39,9 @@ components:
         name: kad-components
         path: ./charts/minio/{version}/
     allowValues: true
+    dependsOn:
+      - ingress
+      - blockStorage
     values: |
       {{- if dig "kyverno" "namespace" "" .Context }}
       kyverno:

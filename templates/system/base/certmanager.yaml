@@ -10,6 +10,7 @@ templates:
       componentReleases:
 
         - name: cert-manager-main
+          enabled: true
           component:
             name: cert:cert-manager
             version: 1.0.0
@@ -22,14 +23,10 @@ templates:
             parameters:
               trustNamespace: {{ .Parameters.namespace }}
           namespace:  {{ .Parameters.namespace }}
-          dependsOn:
-            - {{ .Meta.templateRelease.name }}-main
 
         - name: cert-manager-issuers
           component:
             name: cert:issuers
             version: 1.0.0
           namespace:  {{ .Parameters.namespace }}
-          dependsOn:
-            - {{ .Meta.templateRelease.name }}-trust
 

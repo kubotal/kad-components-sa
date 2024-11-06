@@ -12,6 +12,8 @@ components:
     helmRepository:
       url: https://charts.jetstack.io
       chart: cert-manager
+  roles:
+    - certManagerBase
   values:
     installCRDs: true
     enableCertificateOwnerRef: true
@@ -25,6 +27,8 @@ components:
     helmRepository:
       url: https://charts.jetstack.io
       chart: trust-manager
+  dependsOn:
+    - certManagerBase
   values: |
     app:
       trust:
@@ -39,5 +43,9 @@ components:
     gitRepository:
       name: kad-components
       path: charts/cert-issuers/{version}
+  roles:
+    - certManager
+  dependsOn:
+    - certManagerBase
   values: |
     {{ toYaml .Context.certIssuers }}

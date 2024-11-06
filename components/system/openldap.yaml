@@ -30,6 +30,10 @@ components:
       gitRepository:
         name: kad-components
         path: ./charts/openldap/{version}/
+    dependsOn:
+      - ingress
+    roles:
+      - ldapLocalServer
     values: |
       openldap-stack-ha:
         replicaCount: {{ default 2 .Context.openldap.replicaCount }}

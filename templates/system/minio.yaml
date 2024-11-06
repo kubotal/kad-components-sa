@@ -42,7 +42,7 @@ templates:
                   memory: "2Gi"
                   cpu: "250m"
         dependsOn: 
-          {{ toYaml (concat (list "ingress-nginx") .Parameters.dependsOn) | nindent 4 }}
+          {{ toYaml .Parameters.dependsOn | nindent 4 }}
 
   - name: minio-1
     version: 1.0.0

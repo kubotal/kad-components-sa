@@ -10,6 +10,8 @@ components:
         interval: 1m
     parameters:
       debug: false
+    dependsOn:
+      - ingress
     values: |
       replicaCount: 1
       clusterIssuer: {{ .Context.certificateIssuer.public }}

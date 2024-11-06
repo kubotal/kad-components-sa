@@ -12,6 +12,8 @@ components:
       helmRepository:
         url: https://metallb.github.io/metallb
         chart: metallb
+    roles:
+      - loadBalancerBase
 
   - name: ingress:metallb-pool
     version: 1.0.0
@@ -26,6 +28,10 @@ components:
         remediation:
           retries: 30
           remediateLastFailure: true
+    roles:
+      - loadBalancer
+    dependsOn:
+      - loadBalancerBase
     source:
       defaultVersion: 0.1.0
       gitRepository:

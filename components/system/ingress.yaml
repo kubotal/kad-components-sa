@@ -18,6 +18,11 @@ components:
       helmRepository:
         url: https://kubernetes.github.io/ingress-nginx
         chart: ingress-nginx
+    roles:
+      - ingress
+    dependsOn:
+      - certManager
+      - loadBalancer
     values: |
       controller:
         service:
@@ -34,6 +39,8 @@ components:
       gitRepository:
         name: kad-components
         path: ./charts/ingress-kubernetes/{version}
+    dependsOn:
+      - ingress
     values: |
       kubernetes:
         enabled: {{ .Context.ingress.kubernetes.enabled }}

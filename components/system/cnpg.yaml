@@ -18,4 +18,6 @@ components:
       url: https://cloudnative-pg.github.io/charts
       chart: cloudnative-pg
   allowCreateNamespace: true
+  roles:
+    - pgOperator
 
