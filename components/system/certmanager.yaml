@@ -27,6 +27,8 @@ components:
     helmRepository:
       url: https://charts.jetstack.io
       chart: trust-manager
+  roles:
+    - certManagerTrust
   dependsOn:
     - certManagerBase
   values: |
@@ -46,6 +48,6 @@ components:
   roles:
     - certManager
   dependsOn:
-    - certManagerBase
+    - certManagerTrust
   values: |
     {{ toYaml .Context.certIssuers }}
