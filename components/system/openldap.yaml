@@ -36,7 +36,7 @@ components:
       - ldapLocalServer
     values: |
       openldap-stack-ha:
-        replicaCount: {{ default 2 .Context.openldap.replicaCount }}
+        replicaCount: {{ default 2 .Parameters.replicaCount }}
         replication:
           enabled: {{ if ne .Context.openldap.replicaCount 1 }}true{{else}}false{{end}}
         clusterIssuer: {{ .Context.certificateIssuer.public }}
@@ -72,4 +72,4 @@ components:
         # DO NOT FORGET to put the Root Organisation object as it won't be created while using customLdifFiles
         # To generate passwords: 'slappasswd -s myPassword' on an ldap node
         customLdifFiles:
-          {{ toYaml .Context.openldap.customLdifFiles | nindent 10 }}
+          {{ toYaml .Parameters.customLdifFiles | nindent 10 }}
