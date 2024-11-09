@@ -6,6 +6,17 @@ templates:
     version: 1.0.0
     parameters:
       namespace: cert-manager
+    parametersSchema:
+      yaml:
+        $schema: "http://json-schema.org/schema#"
+        type: object
+        additionalProperties: false
+        required:
+          - namespace
+        properties:
+          namespace:
+            type: string
+            default: cert-manager
     body: |
       componentReleases:
 

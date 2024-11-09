@@ -1,0 +1,54 @@
+$schema: "http://json-schema.org/schema#"
+type: object
+additionalProperties: false
+required:
+  - rootUser
+  - rootPassword
+  - storage
+  - ingressName
+properties:
+  rootUser:
+    type: string
+  rootPassword:
+    type: string
+  storage:
+    type: object
+    additionalProperties: false
+    required:
+      - driveSize
+      - replicas
+      - drivesPerNode
+      - pools
+    properties:
+      driveSize:
+        type: string
+        pattern: "^[0-9]+k|M|G|T|P|E|Ki|Mi|Gi|Ti|Pi|Ei"
+      replicas:
+        type: integer
+      drivesPerNode:
+        type: integer
+      pools:
+        type: integer
+  ingressName:
+    type: string
+  ingressUnsec:
+    type: object
+    required:
+      - enabled
+    additionalProperties: false
+    properties:
+      enabled:
+        type: boolean
+      host:
+        type: [ "string", "null" ]
+    if:
+      properties:
+        enabled:
+          const: true
+      required:
+        - host
+  ldap:
+    type:
+      - string
+      - "null"
+

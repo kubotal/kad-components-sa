@@ -18,6 +18,8 @@ components:
       helmRepository:
         url: https://kubernetes.github.io/ingress-nginx
         chart: ingress-nginx
+    contextSchema:
+      file: _schemas_/context/ingress.yaml
     roles:
       - ingress
     dependsOn:
@@ -39,6 +41,8 @@ components:
       gitRepository:
         name: kad-components
         path: ./charts/ingress-kubernetes/{version}
+    contextSchema:
+      file: _schemas_/context/ingress.yaml
     dependsOn:
       - ingress
     values: |

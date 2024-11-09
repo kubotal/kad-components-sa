@@ -1,0 +1,33 @@
+$schema: "http://json-schema.org/schema#"
+type: object
+additionalProperties: false
+required:
+  - ldapDomain
+  - adminPassword
+  - configPassword
+  - customLdifFiles
+properties:
+  replicaCount:
+    type: integer
+    default: 3
+  ldapDomain:
+    type: string
+  adminUser:
+    type: string
+    default: admin
+  adminPassword:
+    type: string
+  configUser:
+    type: string
+    default: admin
+  configPassword:
+    type: string
+  customLdifFiles:
+    type: object
+    additionalProperties: true
+  adminIngressHost:
+    type: string
+    default: phpldapadmin
+  ldapIngressHost:
+    type: string
+    default: ldap

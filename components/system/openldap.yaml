@@ -12,6 +12,12 @@ components:
       adminPassword: # TBD
       configUser: "admin"
       configPassword: # TBD
+      customLdifFiles: # TBD
+      adminIngressHost: phpldapadmin
+      ldapIngressHost: ldap
+    parametersSchema:
+      file:
+        _schemas_/parameters/openldap.yaml
     config:
       source:
         interval: "2m"
@@ -56,13 +62,13 @@ components:
             annotations:
               cert-manager.io/cluster-issuer:  {{ .Context.certificateIssuer.public }}
             hosts:
-              - phpldapadmin.{{ .Context.ingress.url }}
+              - {{ .Parameters.adminIngressHost }}.{{ .Context.ingress.url }}
             tls:
               - hosts:
-                  - phpldapadmin.{{ .Context.ingress.url }}
+                  - {{ .Parameters.adminIngressHost }}.{{ .Context.ingress.url }}
                 secretName: phpldapadmin-tls
         service:
-          {{ $ldap := printf "ldap.%s" .Context.cluster.domain }}
+          {{ $ldap := printf "%s.%s" .Parameters.ldapIngressHost .Context.cluster.domain }}
           annotations:
             metallb.universe.tf/loadBalancerIPs: {{ resolveDNS $ldap }}
           hosts:

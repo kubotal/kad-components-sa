@@ -1,0 +1,32 @@
+$schema: "http://json-schema.org/schema#"
+type: object
+additionalProperties: true
+required:
+  - ingress
+  - certificateIssuer
+  - cluster
+properties:
+  ingress:
+    type: object
+    additionalProperties: true
+    required:
+      - url
+    properties:
+      url:
+        type: string
+  certificateIssuer:
+    type: object
+    additionalProperties: true
+    required:
+      - public
+    properties:
+      public:
+        type: string
+  cluster:
+    type: object
+    additionalProperties: true
+    required:
+      - domain
+    properties:
+      domain:
+        type: string

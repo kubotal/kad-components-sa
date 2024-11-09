@@ -10,6 +10,8 @@ components:
         interval: 1m
     parameters:
       debug: false
+    contextSchema:
+      file: _schemas_/context/kad-webserver.yaml
     dependsOn:
       - ingress
     values: |

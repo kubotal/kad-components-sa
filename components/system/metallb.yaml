@@ -37,6 +37,8 @@ components:
       gitRepository:
         name: kad-components
         path: ./charts/metallb-pool/{version}
+    contextSchema:
+      file: _schemas_/context/metallb-pool.yaml
     values: |
       ipRanges:
         - first: {{ resolveDNS (printf "first.pool.%s" .Context.cluster.domain) }}

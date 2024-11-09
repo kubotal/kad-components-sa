@@ -9,8 +9,8 @@ templates:
       reloader: true
       replicator: true
       secretGenerator: true
-    schema:
-      raw: |
+    parametersSchema:
+      json: |
         {
           "$schema": "http://json-schema.org/schema#",
           "type": "object",
@@ -19,7 +19,8 @@ templates:
           ],
           "properties": {
             "namespace": {
-              "type": "string"
+              "type": "string",
+              "default": "kube-tools"
             },
             "reloader": {
               "type": "boolean",

@@ -4,6 +4,26 @@ templates:
 
   - name: ingress
     version: 1.0.0
+    contextSchema:
+      yaml:
+        $schema: "http://json-schema.org/schema#"
+        type: object
+        additionalProperties: true
+        required:
+          - ingress
+        properties:
+          ingress:
+            type: object
+            additionalProperties: true
+            properties:
+              kubernetes:
+                type: object
+                additionalProperties: false
+                required:
+                  - enabled
+                properties:
+                  enabled:
+                    type: boolean
     body: |
       componentReleases:
       - name: metallb

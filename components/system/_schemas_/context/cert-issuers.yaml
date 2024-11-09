@@ -1,0 +1,39 @@
+$schema: "http://json-schema.org/schema#"
+type: object
+additionalProperties: true
+required:
+  - certIssuers
+properties:
+  certIssuers:
+    type: object
+    additionalProperties: false
+    required:
+      - selfsignedClusterIssuers
+      - caClusterIssuers
+    properties:
+      selfsignedClusterIssuers:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          properties:
+            name:
+              type: string
+          required:
+            - name
+      caClusterIssuers:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          required:
+            - name
+            - ca_crt
+            - ca_key
+          properties:
+            name:
+              type: string
+            ca_crt:
+              type: string
+            ca_key:
+              type: string

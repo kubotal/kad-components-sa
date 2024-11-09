@@ -13,7 +13,7 @@ templates:
         rootPassword: TBD
       ldap: # MBD (May Be Defined)
       dependsOn: []
-    schema:
+    parametersSchema:
       file: ./minio-x.json
     body: |
       templateReleases:

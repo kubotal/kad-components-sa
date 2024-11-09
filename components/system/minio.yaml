@@ -18,6 +18,10 @@ components:
         enabled: false
         host: # TBD if enabled
       ldap:
+    parametersSchema:
+      file: _schemas_/parameters/minio.yaml
+    contextSchema:
+      file: _schemas_/context/minio.yaml
     config:
       source:
         interval: "2m"
