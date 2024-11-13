@@ -4,6 +4,8 @@ templates:
 
   - name: tools
     version: 1.0.0
+    catalogs:
+      - system
     parameters:
       namespace: kube-tools
       reloader: true
@@ -14,6 +16,8 @@ templates:
         {
           "$schema": "http://json-schema.org/schema#",
           "type": "object",
+          "title": "Miscellaneous Tools",
+          "descrition": "Set of optional tools",
           "additionalProperties": false,
           "required": [
           ],

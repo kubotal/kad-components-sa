@@ -22,6 +22,7 @@ components:
       file: _schemas_/context/ingress.yaml
     roles:
       - ingress
+      - ingress-nginx
     dependsOn:
       - certManager
       - loadBalancer

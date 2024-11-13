@@ -1,5 +1,7 @@
 $schema: "http://json-schema.org/schema#"
 type: object
+title: OpenLDAP server
+description:
 additionalProperties: true
 required:
   - ingress

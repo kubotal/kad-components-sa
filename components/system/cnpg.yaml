@@ -4,9 +4,23 @@ components:
 - name: cnpg
   version: 1.0.0
   suspended: false
+  protected: true
   config:
     install:
       createNamespace: true
+  catalogs:
+    - middleware
+    - databases
+  parametersSchema:
+    yaml:
+      $schema: "http://json-schema.org/schema#"
+      title: CloudNativePG
+      description: |
+        CloudNativePG is the Kubernetes operator that covers the full lifecycle of a highly available PostgreSQL 
+        database cluster with a primary/standby architecture, using native streaming replication.
+      type: object
+      additionalProperties: false
+      properties: {}
   source:
     defaultVersion: 0.21.3
     allowedVersions:

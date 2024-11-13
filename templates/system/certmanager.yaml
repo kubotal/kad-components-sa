@@ -6,9 +6,13 @@ templates:
     version: 1.0.0
     parameters:
       namespace: cert-manager
+    catalogs:
+      - system
     parametersSchema:
       yaml:
         $schema: "http://json-schema.org/schema#"
+        title: cert-manager
+        description: "Automate Certificate generation"
         type: object
         additionalProperties: false
         required:

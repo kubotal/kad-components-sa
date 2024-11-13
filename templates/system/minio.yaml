@@ -58,8 +58,27 @@ templates:
         rootPassword: TBD
       ldap: # MBD (May Be Defined)
       dependsOn: []
+    catalogs:
+      - storage
+      - middleware
     parametersSchema:
       file: _schemas_/parameters/minio-X.json
+    usage: |
+      {{ .Meta.templateRelease.name }} S3 server in single mode
+      <ul>
+      <li>
+      The Minio console can be accessed using <a href="{{ .Parameters.ingressName }}-console.{{ .Context.ingress.url }}">this link</a>
+      </li>
+      <li>
+      You can configure an admin alias for the 'mc' CLI with the following command:
+      <code>mc alias set {{ .Meta.templateRelease.name }} https://{{ .Parameters.ingressName }}-console.{{ .Context.ingress.url }} {{ .Parameters.admin.rootUser }} {{ .Parameters.admin.rootPassword }}</code>
+      </li>
+      {{- if .Parameters.ldap }}
+      <li>
+      This server is use LDAP authentication from '{{ .Parameters.ldap }}'
+      </li>
+      {{- end }}
+      </ul>
     body: |
       templateReleases:
       - name: {{ .Meta.templateRelease.name }}-1
@@ -91,8 +110,27 @@ templates:
         rootPassword: TBD
       ldap: # MBD (May Be Defined)
       dependsOn: []
+    catalogs:
+      - storage
+      - middleware
     parametersSchema:
       file: _schemas_/parameters/minio-X.json
+    usage: |
+      {{ .Meta.templateRelease.name }} S3 server in cluster mode
+      <ul>
+      <li>
+      The Minio console can be accessed using <a href="{{ .Parameters.ingressName }}-console.{{ .Context.ingress.url }}">this link</a>
+      </li>
+      <li>
+      You can configure an admin alias for the 'mc' CLI with the following command:
+      <code>mc alias set {{ .Meta.templateRelease.name }} https://{{ .Parameters.ingressName }}-console.{{ .Context.ingress.url }} {{ .Parameters.admin.rootUser }} {{ .Parameters.admin.rootPassword }}</code>
+      </li>
+      {{- if .Parameters.ldap }}
+      <li>
+      This server is use LDAP authentication from '{{ .Parameters.ldap }}'
+      </li>
+      {{- end }}
+      </ul>
     body: |
       templateReleases:
       - name: {{ .Meta.templateRelease.name }}-4

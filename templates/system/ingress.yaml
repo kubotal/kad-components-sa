@@ -4,6 +4,17 @@ templates:
 
   - name: ingress
     version: 1.0.0
+    catalogs:
+      - system
+    parametersSchema:
+      yaml:
+        $schema: "http://json-schema.org/schema#"
+        title: Ingress controller with load balancer
+        description: |
+          Stack managing ingress with Load Balancer and Ingress controller.
+        type: object
+        additionalProperties: false
+        properties: {}
     contextSchema:
       yaml:
         $schema: "http://json-schema.org/schema#"

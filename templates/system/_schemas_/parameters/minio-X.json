@@ -1,6 +1,8 @@
 {
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
+  "title": "MinIO S3 Server",
+  "description": "The MinIO Enterprise Object Store is built for production environments where everything matters - performance, security,\nscale and manageability. Cloud-native by design, it is ideal for large scale AI/ML infrastructure, modern data lakes and data lakehouses and\ndatabase workloads. It is software-defined and runs on any cloud - private, public, colo or edge.",
   "additionalProperties": false,
   "required": [
     "namespace",
