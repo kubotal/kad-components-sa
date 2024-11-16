@@ -6,14 +6,14 @@ components:
     version: 1.0.0
     protected: true
     parameters:
-      rootUser: TBD
-      rootPassword: TBD
+      rootUser: # TBD
+      rootPassword: # TBD
       storage:
-        driveSize: TBD
-        replicas: TBD
+        driveSize: # TBD
+        replicas: # TBD
         drivesPerNode: 1
         pools: 1
-      ingressName: TBD
+      ingressName: # TBD
       ingressUnsec:
         enabled: false
         host: # TBD if enabled

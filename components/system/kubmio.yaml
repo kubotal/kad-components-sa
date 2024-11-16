@@ -1,0 +1,57 @@
+components:
+
+  - name: kubmio
+    version: 1.0.0
+    protected: false
+    config:
+      install:
+        createNamespace: true
+    source:
+      defaultVersion: 0.5.0-snapshot
+      ociRepository:
+        url: oci://quay.io/kubotal/charts/kubmio
+        interval: 1m
+    parameters:
+      devMode: false
+    parametersSchema:
+      file:
+        _schemas_/parameters/kubmio.yaml
+    catalogs:
+      - storage
+      - middleware
+    contextSchema:
+      file: _schemas_/context/kad-webserver.yaml
+    usage: <a href="https://kubotal.github.io/kubmio-doc/">Please refer to this documentation</a>
+    values: |
+      global:
+        clusterName: {{ .Context.cluster.name }}
+      {{- if .Parameters.devMode }}
+      operator:
+        replicaCount: 1
+        image:
+          pullPolicy: Always
+      supervisor:
+        replicaCount: 1
+        image:
+          pullPolicy: Always
+        logger:
+          mode: dev
+          level: info
+      sweeper:
+        image:
+          pullPolicy: Always
+        logger:
+          mode: dev
+          level: debug
+      webhooks:
+        replicaCount: 1
+        image:
+          pullPolicy: Always
+        logger:
+          mode: dev
+          level: info
+      {{- end }}
+      
+      
+
+
