@@ -11,6 +11,8 @@ components:
       ociRepository:
         url: oci://quay.io/kubotal/charts/kubmio
         interval: 1m
+    dependsOn:
+      - certManager
     parameters:
       devMode: false
     parametersSchema:
