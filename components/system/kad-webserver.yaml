@@ -14,6 +14,7 @@ components:
         interval: 1m
     parameters:
       debug: false
+      deploymentLocation: # TBD
     catalogs:
       - system
     contextSchema:
@@ -21,18 +22,20 @@ components:
     dependsOn:
       - ingress
     values: |
-      replicaCount: 1
       clusterIssuer: {{ .Context.certificateIssuer.public }}
       ingress:
         host: kad.{{ .Context.ingress.url }}
+      webConfig:
+        gitHandler:
+          deploymentLocation: {{ .Parameters.deploymentLocation }}
       {{- if .Parameters.debug }}
+      replicaCount: 1
       logger:
         mode: dev
         level: debug
       image:
         pullPolicy: Always
-      webConfig:
-        refreshPeriod: 1m
+      {{- else }}
+      replicaCount: 1    # Currently, pb if > 1
       {{- end }}
-
 
