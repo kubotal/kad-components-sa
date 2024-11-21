@@ -28,7 +28,7 @@ components:
         properties:
           ingress:
             type: object
-            additionalProperties: false
+            additionalProperties: true
             required:
               - url
             properties:

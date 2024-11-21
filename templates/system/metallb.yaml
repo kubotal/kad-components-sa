@@ -26,5 +26,5 @@ templates:
       - name: metallb-pool
         namespace: metallb
         component:
-          name: ingress:metallb-pool
+          name: metallb-pool
           version: 1.0.0
