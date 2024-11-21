@@ -1,6 +1,6 @@
 components:
 
-  - name: ingress:ingress-nginx
+  - name: ingress-nginx
     version: 1.0.0
     config:
       timeout: 1m
@@ -19,7 +19,21 @@ components:
         url: https://kubernetes.github.io/ingress-nginx
         chart: ingress-nginx
     contextSchema:
-      file: _schemas_/context/ingress.yaml
+      yaml:
+        $schema: "http://json-schema.org/schema#"
+        type: object
+        additionalProperties: true
+        required:
+          - ingress
+        properties:
+          ingress:
+            type: object
+            additionalProperties: false
+            required:
+              - url
+            properties:
+              url:
+                type: string
     roles:
       - ingress
       - ingress-nginx
@@ -34,20 +48,3 @@ components:
             metallb.universe.tf/allow-shared-ip: "ingress"
         extraArgs:
           enable-ssl-passthrough: true
-
-  - name: ingress:kubernetes
-    version: 1.0.0
-    source:
-      defaultVersion: 0.1.0
-      gitRepository:
-        name: kad-components
-        path: ./charts/ingress-kubernetes/{version}
-    contextSchema:
-      file: _schemas_/context/ingress.yaml
-    dependsOn:
-      - ingress
-    values: |
-      kubernetes:
-        enabled: {{ .Context.ingress.kubernetes.enabled }}
-        host: kubernetes.{{ .Context.ingress.url }}
-      

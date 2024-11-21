@@ -1,0 +1,30 @@
+
+
+templates:
+
+  - name: metallb
+    version: 1.0.0
+    catalogs:
+      - system
+    parametersSchema:
+      yaml:
+        $schema: "http://json-schema.org/schema#"
+        title: "Metallb: In cluster load balancer"
+        description: |
+          Stack managing installation and configuration of the Metallb load balancer
+        type: object
+        additionalProperties: false
+        properties: {}
+    body: |
+      componentReleases:
+      - name: metallb
+        namespace: metallb
+        component:
+          name: metallb-base
+          version: 1.0.0
+      
+      - name: metallb-pool
+        namespace: metallb
+        component:
+          name: ingress:metallb-pool
+          version: 1.0.0
