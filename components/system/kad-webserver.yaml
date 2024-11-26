@@ -26,7 +26,7 @@ components:
       ingress:
         host: kad.{{ .Context.ingress.url }}
       webConfig:
-        gitHandler:
+        getGateway:
           deploymentLocation: {{ .Parameters.deploymentLocation }}
       {{- if .Parameters.debug }}
       replicaCount: 1
