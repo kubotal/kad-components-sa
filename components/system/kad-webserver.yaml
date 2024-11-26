@@ -14,14 +14,18 @@ components:
         interval: 1m
     parameters:
       debug: false
+      replicaCount: 2
       deploymentLocation: # TBD
     catalogs:
       - system
+    parametersSchema:
+      file: _schemas_/parameters/kad-webserver.yaml
     contextSchema:
       file: _schemas_/context/kad-webserver.yaml
     dependsOn:
       - ingress
     values: |
+      replicaCount: {{ .Parameters.replicaCount }}
       clusterIssuer: {{ .Context.certificateIssuer.public }}
       ingress:
         host: kad.{{ .Context.ingress.url }}
@@ -29,13 +33,10 @@ components:
         gitGateway:
           deploymentLocation: {{ .Parameters.deploymentLocation }}
       {{- if .Parameters.debug }}
-      replicaCount: 1
       logger:
         mode: dev
         level: debug
       image:
         pullPolicy: Always
-      {{- else }}
-      replicaCount: 1    # Currently, pb if > 1
       {{- end }}
 

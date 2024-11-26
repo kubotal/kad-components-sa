@@ -20,3 +20,6 @@ properties:
       Location inside the GIT repository where the GitHandler will store the pushed files
       Must be a folder
       Must be in the list of kadFiles of the primarySource
+  replicaCount:
+    type: integer
+    description: Number of replicas
