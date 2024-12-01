@@ -1,0 +1,255 @@
+
+
+
+components:
+
+  - name: minio
+    version: 2.0.0
+    protected: true
+    parametersSchema:
+      document: schema-parameters-component-minio-2.0.0
+    config:
+      source:
+        interval: "2m"
+      timeout:  "5m"
+      install:
+        createNamespace: true
+        remediation:
+          retries: 30
+          remediateLastFailure: true
+      upgrade:
+        remediation:
+          retries: 30
+          remediateLastFailure: true
+    source:
+      defaultVersion: 5.2.0
+      allowedVersions:
+        - 5.2.0
+      gitRepository:
+        name: kad-components
+        path: ./charts/minio/{version}/
+    allowValues: true
+    dependsOn:
+      - ingress
+      - blockStorage
+    parameters:
+      rootUser: # TBD
+      rootPassword: # TBD
+      storage:
+        driveSize: # TBD
+        replicas: # TBD
+        drivesPerNode: 1
+        pools: 1
+      clusterIssuer: # TBD
+      storageClass: # TBD
+      # SSL passthrough, so the CA is the 'main' clusterIssuer
+      ingresses:
+        passthrough:
+          enabled: true
+          url: # TBD
+        console:
+          enabled: true
+          url: # TBD
+          clusterIssuer: # TBD
+        # The following ingress is intended to allow access with another CA, typically public.
+        # To use if minio is setup with a private cert. But as SSL is decoded/re-encoded, there is a performance penalty.
+        alternate:
+          enabled: false
+          url: # TBD
+          clusterIssuer: # TBD
+        unsec:
+          enabled: false
+          url: TBD
+      environment:
+    values: |
+      minio:
+        rootUser: {{ .Parameters.rootUser }}
+        rootPassword: {{ .Parameters.rootPassword }}
+        clusterIssuer: {{ .Parameters.clusterIssuer }}
+        tls:
+          enabled: true
+        persistence:
+          storageClass: {{ .Parameters.storageClass }}
+          size: {{ .Parameters.storage.driveSize }}
+        drivesPerNode: {{ .Parameters.storage.drivesPerNode }}
+        replicas: {{ .Parameters.storage.replicas }}
+        mode: {{ if ne .Parameters.storage.replicas 1 }}distributed{{else}}standalone{{end}}
+        pools: {{ .Parameters.storage.pools }}
+        ingress:
+          enabled: {{ .Parameters.ingresses.passthrough.enabled }}
+          hosts:
+            - {{ .Parameters.ingresses.passthrough.url }}
+        consoleIngress:
+          enabled: {{ .Parameters.ingresses.console.enabled }}
+          annotations:
+            cert-manager.io/cluster-issuer: {{ .Parameters.ingresses.console.clusterIssuer }}
+          hosts:
+            - {{ .Parameters.ingresses.console.url }}
+          tls:
+            - secretName: {{ .Meta.componentRelease.name }}-console-tls
+              hosts:
+                - {{ .Parameters.ingresses.console.url }}
+        ingressExt:
+          enabled: {{ .Parameters.ingresses.alternate.enabled }}
+          clusterIssuer: {{  .Parameters.ingresses.alternate.clusterIssuer }}
+          host: {{ .Parameters.ingresses.alternate.url }}
+        ingressUnsec:
+          enabled: {{ .Parameters.ingresses.unsec.enabled }}
+          host: {{ .Parameters.ingresses.unsec.url }}
+        {{- with .Parameters.environment }}
+        environment:
+          {{- toYaml . | nindent 6 }}
+        {{- end }}
+        users: []
+
+# -----------------------------------------------------------------
+
+documents:
+
+  - name: schema-parameters-component-minio-2.0.0
+    yaml:
+      $schema: "http://json-schema.org/schema#"
+      type: object
+      additionalProperties: false
+      required:
+        - rootUser
+        - rootPassword
+        - storage
+        - ingresses
+        - clusterIssuer
+        - storageClass
+      properties:
+        rootUser:
+          type: string
+        rootPassword:
+          type: string
+        storage:
+          type: object
+          additionalProperties: false
+          required:
+            - driveSize
+            - replicas
+            - drivesPerNode
+            - pools
+          properties:
+            driveSize:
+              type: string
+              pattern: "^[0-9]+k|M|G|T|P|E|Ki|Mi|Gi|Ti|Pi|Ei"
+            replicas:
+              type: integer
+            drivesPerNode:
+              type: integer
+            pools:
+              type: integer
+        clusterIssuer:
+          type: string
+        storageClass:
+          type: string
+        ingresses:
+          type: object
+          additionalProperties: false
+          properties:
+            passthrough:
+              type: object
+              additionalProperties: false
+              required:
+                - enabled
+              properties:
+                enabled:
+                  type: boolean
+                  default: true
+                url:
+                  type: string
+              if:
+                properties:
+                  enabled:
+                    const: true
+                required:
+                  - url
+            console:
+              type: object
+              additionalProperties: false
+              required:
+                - enabled
+              properties:
+                enabled:
+                  type: boolean
+                  default: true
+                url:
+                  type: string
+                clusterIssuer:
+                  type: string
+              if:
+                properties:
+                  enabled:
+                    const: true
+                required:
+                  - url
+                  - clusterIssuer
+            alternate:
+              type: object
+              additionalProperties: false
+              required:
+                - enabled
+              properties:
+                enabled:
+                  type: boolean
+                  default: false
+                url:
+                  type: string
+                clusterIssuer:
+                  type: string
+              if:
+                properties:
+                  enabled:
+                    const: true
+                required:
+                  - url
+                  - clusterIssuer
+            unsec:
+              type: object
+              additionalProperties: false
+              required:
+                - enabled
+              properties:
+                enabled:
+                  type: boolean
+                  default: false
+                url:
+                  type: string
+              if:
+                properties:
+                  enabled:
+                    const: true
+                required:
+                  - url
+        environment:
+          type: [ "object", "null" ]
+          additionalProperties: false
+          required:
+            - MINIO_IDENTITY_LDAP_SERVER_ADDR
+            - MINIO_IDENTITY_LDAP_LOOKUP_BIND_DN
+            - MINIO_IDENTITY_LDAP_LOOKUP_BIND_PASSWORD
+            - MINIO_IDENTITY_LDAP_USER_DN_SEARCH_BASE_DN
+            - MINIO_IDENTITY_LDAP_USER_DN_SEARCH_FILTER
+            - MINIO_IDENTITY_LDAP_GROUP_SEARCH_BASE_DN
+            - MINIO_IDENTITY_LDAP_GROUP_SEARCH_FILTER
+            - MINIO_IDENTITY_LDAP_TLS_SKIP_VERIFY
+            - MINIO_IDENTITY_LDAP_SERVER_INSECURE
+            - MINIO_IDENTITY_LDAP_SERVER_STARTTLS
+            - MINIO_IDENTITY_LDAP_SRV_RECORD_NAME
+            - MINIO_IDENTITY_LDAP_COMMENT
+          properties:
+            MINIO_IDENTITY_LDAP_SERVER_ADDR: { type: string }
+            MINIO_IDENTITY_LDAP_LOOKUP_BIND_DN: { type: string }
+            MINIO_IDENTITY_LDAP_LOOKUP_BIND_PASSWORD: { type: string }
+            MINIO_IDENTITY_LDAP_USER_DN_SEARCH_BASE_DN: { type: string }
+            MINIO_IDENTITY_LDAP_USER_DN_SEARCH_FILTER: { type: string }
+            MINIO_IDENTITY_LDAP_GROUP_SEARCH_BASE_DN: { type: string }
+            MINIO_IDENTITY_LDAP_GROUP_SEARCH_FILTER: { type: string }
+            MINIO_IDENTITY_LDAP_TLS_SKIP_VERIFY: { type: string }
+            MINIO_IDENTITY_LDAP_SERVER_INSECURE: { type: string }
+            MINIO_IDENTITY_LDAP_SERVER_STARTTLS: { type: string }
+            MINIO_IDENTITY_LDAP_SRV_RECORD_NAME: { type: string }
+            MINIO_IDENTITY_LDAP_COMMENT: { type: string }
+

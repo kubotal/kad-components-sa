@@ -1,0 +1,221 @@
+
+
+templates:
+  - name: minio
+    version: 2.0.0
+    parameters:
+      rootUser: # TBD
+      rootPassword: # TBD
+      storage:
+        driveSize: # TBD
+        replicas: # TBD
+        drivesPerNode: 1
+        pools: 1
+      namespace: # TBD
+      ingresses:
+        console: true
+        unsec: false
+      protected: true
+      ldap:
+    parametersSchema:
+      document: schema-parameters-template-minio-2.0.0
+    contextSchema:
+      document: schema-context-template-minio-2.0.0
+    usage: |
+      {{ .Meta.templateRelease.name }} S3 server in single mode
+      <ul>
+      <li>
+      The Minio console can be accessed using <a href="{{ .Parameters.ingressName }}-console.{{ .Context.ingress.url }}">this link</a>
+      </li>
+      <li>
+      You can configure an admin alias for the 'mc' CLI with the following command:
+      <code>mc alias set {{ .Meta.templateRelease.name }} https://{{ .Parameters.ingressName }}-console.{{ .Context.ingress.url }} {{ .Parameters.admin.rootUser }} {{ .Parameters.admin.rootPassword }}</code>
+      </li>
+      {{- if .Parameters.ldap }}
+      <li>
+      This server is use LDAP authentication from '{{ .Parameters.ldap }}'
+      </li>
+      {{- end }}
+      </ul>
+    body: |
+      componentReleases:
+      - name: {{ .Meta.templateRelease.name }}
+        namespace: {{ .Parameters.namespace }}
+        component:
+          name: minio
+          version: 2.0.0
+          protected: {{ .Parameters.protected }}
+          parameters: 
+            rootUser: {{ .Parameters.rootUser }}
+            rootPassword: {{ .Parameters.rootPassword }}
+            storage:
+              driveSize: {{ .Parameters.storage.driveSize }}
+              replicas:  {{ .Parameters.storage.replicas }}
+              drivesPerNode: {{ .Parameters.storage.drivesPerNode }}
+              pools: {{ .Parameters.storage.pools }}
+            clusterIssuer: {{ .Context.certificateIssuer.internal }}
+            storageClass: {{ .Context.storageClass.data }}
+            ingresses:
+            {{- if eq .Context.certificateIssuer.public .Context.certificateIssuer.internal }}
+              passthrough:
+                enabled: true
+                url: {{ .Meta.templateRelease.name }}.{{ .Context.ingress.url }}
+              alternate:
+                enabled: false
+            {{- else }}
+              passthrough:
+                enabled: true
+                url: {{ .Meta.templateRelease.name }}-ptr.{{ .Context.ingress.url }}
+              alternate:
+                enabled: true
+                url: {{ .Meta.templateRelease.name }}.{{ .Context.ingress.url }}
+                clusterIssuer: {{ .Context.certificateIssuer.public }}
+            {{- end }}
+              console:
+                enabled: {{ .Parameters.ingresses.console }}
+                url: {{ .Meta.templateRelease.name }}-console.{{ .Context.ingress.url }}
+                clusterIssuer: {{ .Context.certificateIssuer.public }}
+              unsec:
+                enabled: {{ .Parameters.ingresses.unsec }}
+                url: {{ .Meta.templateRelease.name }}-unsec.{{ .Context.ingress.url }}
+            {{- if .Parameters.ldap }}
+            {{- toYaml (get .Context.minio.ldapSettings  .Parameters.ldap ) | nindent 6 }}
+            {{- end }}          
+
+# --------------------------------------------------------------
+
+documents:
+
+  - name: schema-parameters-template-minio-2.0.0
+    yaml:
+      $schema: "http://json-schema.org/schema#"
+      type: object
+      additionalProperties: false
+      required:
+        - rootUser
+        - rootPassword
+        - storage
+        - namespace
+        - ingresses
+      properties:
+        rootUser:
+          type: string
+        rootPassword:
+          type: string
+        storage:
+          type: object
+          additionalProperties: false
+          required:
+            - driveSize
+            - replicas
+            - drivesPerNode
+            - pools
+          properties:
+            driveSize:
+              type: string
+              pattern: "^[0-9]+k|M|G|T|P|E|Ki|Mi|Gi|Ti|Pi|Ei"
+            replicas:
+              type: integer
+            drivesPerNode:
+              type: integer
+            pools:
+              type: integer
+        namespace:
+          type: string
+        ingresses:
+          type: object
+          additionalProperties: false
+          properties:
+            console:
+              type: boolean
+              default: true
+            unsec:
+              type: boolean
+              default: false
+        protected:
+          type: boolean
+          default: true
+        ldap:
+          type: [ "string", "null" ]
+
+  - name: schema-context-template-minio-2.0.0
+    yaml:
+      $schema: "http://json-schema.org/schema#"
+      type: object
+      additionalProperties: true
+      required:
+        - ingress
+        - certificateIssuer
+        - storageClass
+      properties:
+        ingress:
+          type: object
+          additionalProperties: true
+          required:
+            - url
+          properties:
+            url:
+              type: string
+        certificateIssuer:
+          type: object
+          additionalProperties: true
+          required:
+            - public
+            - internal
+          properties:
+            public:
+              type: string
+            internal:
+              type: string
+        storageClass:
+          type: object
+          additionalProperties: true
+          required:
+            - data
+          properties:
+            data:
+              type: string
+        minio:
+          type: object
+          additionalProperties: false
+          properties:
+            ldapSettings:
+              type: object
+              patternProperties:
+                "^.*$":
+                  type: object
+                  additionalProperties: false
+                  required:
+                    - environment
+                  properties:
+                    environment:
+                      type: object
+                      additionalProperties: false
+                      required:
+                        - MINIO_IDENTITY_LDAP_SERVER_ADDR
+                        - MINIO_IDENTITY_LDAP_LOOKUP_BIND_DN
+                        - MINIO_IDENTITY_LDAP_LOOKUP_BIND_PASSWORD
+                        - MINIO_IDENTITY_LDAP_USER_DN_SEARCH_BASE_DN
+                        - MINIO_IDENTITY_LDAP_USER_DN_SEARCH_FILTER
+                        - MINIO_IDENTITY_LDAP_GROUP_SEARCH_BASE_DN
+                        - MINIO_IDENTITY_LDAP_GROUP_SEARCH_FILTER
+                        - MINIO_IDENTITY_LDAP_TLS_SKIP_VERIFY
+                        - MINIO_IDENTITY_LDAP_SERVER_INSECURE
+                        - MINIO_IDENTITY_LDAP_SERVER_STARTTLS
+                        - MINIO_IDENTITY_LDAP_SRV_RECORD_NAME
+                        - MINIO_IDENTITY_LDAP_COMMENT
+                      properties:
+                        MINIO_IDENTITY_LDAP_SERVER_ADDR: { type: string }
+                        MINIO_IDENTITY_LDAP_LOOKUP_BIND_DN: { type: string }
+                        MINIO_IDENTITY_LDAP_LOOKUP_BIND_PASSWORD: { type: string }
+                        MINIO_IDENTITY_LDAP_USER_DN_SEARCH_BASE_DN: { type: string }
+                        MINIO_IDENTITY_LDAP_USER_DN_SEARCH_FILTER: { type: string }
+                        MINIO_IDENTITY_LDAP_GROUP_SEARCH_BASE_DN: { type: string }
+                        MINIO_IDENTITY_LDAP_GROUP_SEARCH_FILTER: { type: string }
+                        MINIO_IDENTITY_LDAP_TLS_SKIP_VERIFY: { type: string }
+                        MINIO_IDENTITY_LDAP_SERVER_INSECURE: { type: string }
+                        MINIO_IDENTITY_LDAP_SERVER_STARTTLS: { type: string }
+                        MINIO_IDENTITY_LDAP_SRV_RECORD_NAME: { type: string }
+                        MINIO_IDENTITY_LDAP_COMMENT: { type: string }
+
+
