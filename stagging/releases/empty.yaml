@@ -1,0 +1,19 @@
+
+context:
+  empty:
+    ctxValue1: xxxx
+    ctxValue2:
+      ctxSub1: 11111
+      ctxSub2: 22222
+
+componentReleases:
+
+  - name: empty
+    component:
+      name: empty
+      version: 1.0.0
+      parameters:
+        value2:
+          sub1: s1
+          sub2: s2
+    namespace: empty

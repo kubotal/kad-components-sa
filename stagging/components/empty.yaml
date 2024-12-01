@@ -1,0 +1,21 @@
+components:
+
+  - name: empty
+    version: 1.0.0
+    protected: true
+    config:
+      install:
+        createNamespace: true
+    source:
+      defaultVersion: 0.1.0
+      gitRepository:
+        name: kad-components
+        path: ./charts/empty/{version}/
+    parameters:
+      value1: val1
+    values: |
+      theParameters: 
+        {{- toYaml .Parameters | nindent 6 }}
+      theContext: 
+        {{- toYaml .Context.empty | nindent 6 }}
+      baseUrl: {{ .Context.ingress.url }}
