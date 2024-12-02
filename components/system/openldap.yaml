@@ -19,8 +19,9 @@ components:
       - middleware
       - identity
     parametersSchema:
-      file:
-        _schemas_/parameters/openldap.yaml
+      document: schema-parameters-openldap-1.0.0
+    contextSchema:
+      document: schema-context-openldap-1.0.0
     usage: |
       {{ .Meta.componentRelease.name }} LDAP server
       <ul>
@@ -102,3 +103,81 @@ components:
         # To generate passwords: 'slappasswd -s myPassword' on an ldap node
         customLdifFiles:
           {{ toYaml .Parameters.customLdifFiles | nindent 10 }}
+
+documents:
+  - name: schema-parameters-openldap-1.0.0
+    yaml:
+      $schema: "http://json-schema.org/schema#"
+      type: object
+      title: OpenLDAP
+      description: |
+        OpenLDAP Software is an open source implementation of the Lightweight Directory Access Protocol.
+      additionalProperties: false
+      required:
+        - ldapDomain
+        - adminPassword
+        - configPassword
+        - customLdifFiles
+      properties:
+        replicaCount:
+          type: integer
+          default: 3
+        ldapDomain:
+          type: string
+        adminUser:
+          type: string
+          default: admin
+        adminPassword:
+          type: string
+        configUser:
+          type: string
+          default: admin
+        configPassword:
+          type: string
+        customLdifFiles:
+          type: object
+          additionalProperties: true
+        adminIngressHost:
+          type: string
+          default: phpldapadmin
+        ldapIngressHost:
+          type: string
+          default: ldap
+
+
+  - name: schema-context-openldap-1.0.0
+    yaml:
+      $schema: "http://json-schema.org/schema#"
+      type: object
+      title: OpenLDAP server
+      additionalProperties: true
+      required:
+        - ingress
+        - certificateIssuer
+        - cluster
+      properties:
+        ingress:
+          type: object
+          additionalProperties: true
+          required:
+            - url
+          properties:
+            url:
+              type: string
+        certificateIssuer:
+          type: object
+          additionalProperties: true
+          required:
+            - public
+          properties:
+            public:
+              type: string
+        cluster:
+          type: object
+          additionalProperties: true
+          required:
+            - domain
+          properties:
+            domain:
+              type: string
+

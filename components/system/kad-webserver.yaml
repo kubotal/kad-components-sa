@@ -19,9 +19,9 @@ components:
     catalogs:
       - system
     parametersSchema:
-      file: _schemas_/parameters/kad-webserver.yaml
+      document: schema-parameters-kad-webserver-1.0.0
     contextSchema:
-      file: _schemas_/context/kad-webserver.yaml
+      document: schema-context-kad-webserver-1.0.0
     dependsOn:
       - ingress
     values: |
@@ -39,4 +39,60 @@ components:
       image:
         pullPolicy: Always
       {{- end }}
+
+documents:
+  - name: schema-parameters-kad-webserver-1.0.0
+    yaml:
+      $schema: "http://json-schema.org/schema#"
+      type: object
+      additionalProperties: false
+      required:
+        - deploymentLocation
+      properties:
+        debug:
+          type: boolean
+          default: false
+          description: |
+            <p>This mode to ease development. When set:</p>
+            <ul>
+              <li>All replicas ar set to '1'</li>
+              <li>imagePullPolicy is set to Always</li>
+              <li>logMode is set to 'dev' and logLevel to 'DEBUG'</li>
+            </ul>
+        deploymentLocation:
+          type: string
+          description: |
+            Location inside the GIT repository where the GitHandler will store the pushed files
+            Must be a folder
+            Must be in the list of kadFiles of the primarySource
+        replicaCount:
+          type: integer
+          description: Number of replicas
+
+
+  - name: schema-context-kad-webserver-1.0.0
+    yaml:
+      $schema: "http://json-schema.org/schema#"
+      type: object
+      additionalProperties: true
+      required:
+        - ingress
+        - certificateIssuer
+      properties:
+        ingress:
+          type: object
+          additionalProperties: true
+          required:
+            - url
+          properties:
+            url:
+              type: string
+        certificateIssuer:
+          type: object
+          additionalProperties: true
+          required:
+            - public
+          properties:
+            public:
+              type: string
 
