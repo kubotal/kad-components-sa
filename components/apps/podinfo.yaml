@@ -19,6 +19,8 @@ components:
       document: schema-context-component-podinfo-1.0.0
     parameters:
       ingressName: # TBD
+    dependsOn:
+      - ingress
     values: |
       securityContext:
         allowPrivilegeEscalation: false
