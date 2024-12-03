@@ -1,0 +1,87 @@
+
+components:
+  - name: podinfo
+    version: 1.0.0
+    protected: false
+    config:
+      install:
+        createNamespace: true
+    catalogs:
+      - misc
+    source:
+      defaultVersion: 6.7.1
+      helmRepository:
+        url: https://stefanprodan.github.io/podinfo
+        chart: podinfo
+    parametersSchema:
+      document: schema-parameters-component-podinfo-1.0.0
+    contextSchema:
+      document: schema-context-component-podinfo-1.0.0
+    parameters:
+      ingressName: # TBD
+    values: |
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop:
+            - "ALL"
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+        runAsUser: 100 # User 'app'
+      ingress:
+        enabled: true
+        className: nginx
+        annotations:
+          cert-manager.io/cluster-issuer: {{ .Context.certificateIssuer.public }}
+        hosts:
+          - host: {{ .Parameters.ingressName }}.{{ .Context.ingress.url }}
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+        tls:
+          - secretName: {{ .Meta.componentRelease.name }}-tls
+            hosts:
+              - {{ .Parameters.ingressName }}.{{ .Context.ingress.url }}
+
+
+documents:
+
+  - name: schema-parameters-component-podinfo-1.0.0
+    yaml:
+      $schema: "http://json-schema.org/schema#"
+      type: object
+      additionalProperties: false
+      required:
+        - ingressName
+      properties:
+        ingressName:
+          type: string
+
+
+  - name: schema-context-component-podinfo-1.0.0
+    yaml:
+      $schema: "http://json-schema.org/schema#"
+      type: object
+      additionalProperties: true
+      required:
+        - ingress
+        - certificateIssuer
+      properties:
+        ingress:
+          type: object
+          additionalProperties: true
+          required:
+            - url
+          properties:
+            url:
+              type: string
+        certificateIssuer:
+          type: object
+          additionalProperties: true
+          required:
+            - public
+          properties:
+            public:
+              type: string
