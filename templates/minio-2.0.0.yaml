@@ -18,6 +18,7 @@ templates:
       protected: true
       createNamespace: false
       ldap:
+      dependsOn:
     parametersSchema:
       document: schema-parameters-template-minio-2.0.0
     contextSchema:
@@ -60,21 +61,13 @@ templates:
             clusterIssuer: {{ .Context.certificateIssuer.internal }}
             storageClass: {{ .Context.storageClass.data }}
             ingresses:
-            {{- if eq .Context.certificateIssuer.public .Context.certificateIssuer.internal }}
               passthrough:
                 enabled: true
                 url: {{ .Meta.templateRelease.name }}.{{ .Context.ingress.url }}
-              alternate:
-                enabled: false
-            {{- else }}
-              passthrough:
-                enabled: true
-                url: {{ .Meta.templateRelease.name }}-ptr.{{ .Context.ingress.url }}
-              alternate:
-                enabled: true
-                url: {{ .Meta.templateRelease.name }}.{{ .Context.ingress.url }}
+              alternate: 
+                enabled: {{ ne .Context.certificateIssuer.public .Context.certificateIssuer.internal }}
+                url: {{ .Meta.templateRelease.name }}-alt.{{ .Context.ingress.url }}
                 clusterIssuer: {{ .Context.certificateIssuer.public }}
-            {{- end }}
               console:
                 enabled: {{ .Parameters.ingresses.console }}
                 url: {{ .Meta.templateRelease.name }}-console.{{ .Context.ingress.url }}
@@ -85,6 +78,12 @@ templates:
             {{- if .Parameters.ldap }}
             {{- toYaml (get .Context.minio.ldapSettings  .Parameters.ldap ) | nindent 6 }}
             {{- end }}          
+        {{- with .Parameters.dependsOn }}
+        dependsOn:
+          {{- range . }}
+          - {{ . }}
+          {{- end }}
+        {{- end }}          
 
 # --------------------------------------------------------------
 
@@ -144,6 +143,11 @@ documents:
           default: false
         ldap:
           type: [ "string", "null" ]
+        dependsOn:
+          type:
+            - "array"
+            - "null"
+
 
   - name: schema-context-template-minio-2.0.0
     yaml:

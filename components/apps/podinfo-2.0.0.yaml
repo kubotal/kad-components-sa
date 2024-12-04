@@ -1,0 +1,72 @@
+
+components:
+  - name: podinfo
+    version: 2.0.0
+    protected: false
+    config:
+      install:
+        createNamespace: true
+    catalogs:
+      - misc
+    source:
+      defaultVersion: 6.7.1
+      helmRepository:
+        url: https://stefanprodan.github.io/podinfo
+        chart: podinfo
+    parametersSchema:
+      document: schema-parameters-component-podinfo-2.0.0
+    parameters:
+      ingress:
+        url: #  TBD
+        certificateIssuer: # TBD
+    dependsOn:
+      - ingress
+    values: |
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop:
+            - "ALL"
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+        runAsUser: 100 # User 'app'
+      ingress:
+        enabled: true
+        className: nginx
+        annotations:
+          cert-manager.io/cluster-issuer: {{ .Parameters.ingress.certificateIssuer}}
+        hosts:
+          - host: {{ .Parameters.ingress.url }}
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+        tls:
+          - secretName: {{ .Meta.componentRelease.name }}-tls
+            hosts:
+              - {{ .Parameters.ingress.url }}
+
+documents:
+
+  - name: schema-parameters-component-podinfo-2.0.0
+    yaml:
+      $schema: "http://json-schema.org/schema#"
+      type: object
+      additionalProperties: false
+      required:
+        - ingress
+      properties:
+        ingress:
+          type: object
+          additionalProperties: false
+          required:
+            - url
+            - certificateIssuer
+          properties:
+            url:
+              type: string
+            certificateIssuer:
+              type: string
+
+

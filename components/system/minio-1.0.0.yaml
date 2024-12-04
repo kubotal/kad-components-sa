@@ -96,7 +96,7 @@ components:
         ingressExt:
           enabled: {{ ne .Context.certificateIssuer.public .Context.certificateIssuer.internal }}
           clusterIssuer: {{ .Context.certificateIssuer.public }}
-          host: {{ .Parameters.ingressName }}-ext.{{ .Context.ingress.url }}
+          host: {{ .Parameters.ingressName }}-alt.{{ .Context.ingress.url }}
         {{- if .Parameters.ingressUnsec.enabled }}
         ingressUnsec:
           enabled: true
