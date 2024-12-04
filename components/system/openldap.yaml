@@ -6,7 +6,7 @@ components:
     version: 1.0.0
     protected: true
     parameters:
-      replicaCount: 3
+      replicaCount: 2
       ldapDomain: # TBD (i.e: example.com)
       adminUser: admin
       adminPassword: # TBD
