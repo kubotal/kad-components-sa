@@ -23,22 +23,8 @@ templates:
       document: schema-parameters-template-minio-2.0.0
     contextSchema:
       document: schema-context-template-minio-2.0.0
-    usage: |
-      {{ .Meta.templateRelease.name }} S3 server in single mode
-      <ul>
-      <li>
-      The Minio console can be accessed using <a href="{{ .Parameters.ingressName }}-console.{{ .Context.ingress.url }}">this link</a>
-      </li>
-      <li>
-      You can configure an admin alias for the 'mc' CLI with the following command:
-      <code>mc alias set {{ .Meta.templateRelease.name }} https://{{ .Parameters.ingressName }}-console.{{ .Context.ingress.url }} {{ .Parameters.admin.rootUser }} {{ .Parameters.admin.rootPassword }}</code>
-      </li>
-      {{- if .Parameters.ldap }}
-      <li>
-      This server is use LDAP authentication from '{{ .Parameters.ldap }}'
-      </li>
-      {{- end }}
-      </ul>
+    usage:
+      document: usage-template-minio-2.0.0
     body: |
       componentReleases:
       - name: {{ .Meta.templateRelease.name }}
@@ -88,6 +74,24 @@ templates:
 # --------------------------------------------------------------
 
 documents:
+
+  - name: usage-template-minio-2.0.0
+    text: |
+      {{ .Meta.templateRelease.name }} S3 server in single mode
+      <ul>
+      <li>
+      The Minio console can be accessed using <a href="{{ .Parameters.ingressName }}-console.{{ .Context.ingress.url }}">this link</a>
+      </li>
+      <li>
+      You can configure an admin alias for the 'mc' CLI with the following command:
+      <code>mc alias set {{ .Meta.templateRelease.name }} https://{{ .Parameters.ingressName }}-console.{{ .Context.ingress.url }} {{ .Parameters.rootUser }} {{ .Parameters.rootPassword }}</code>
+      </li>
+      {{- if .Parameters.ldap }}
+      <li>
+      This server is use LDAP authentication from '{{ .Parameters.ldap }}'
+      </li>
+      {{- end }}
+      </ul>
 
   - name: schema-parameters-template-minio-2.0.0
     yaml:

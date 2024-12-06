@@ -22,7 +22,8 @@ components:
       document: schema-parameters-kubmio-1.0.0
     contextSchema:
       document: schema-context-kubmio-1.0.0
-    usage: <a href="https://kubotal.github.io/kubmio-doc/">Please refer to this documentation</a>
+    usage:
+      text: <a href="https://kubotal.github.io/kubmio-doc/">Please refer to this documentation</a>
     values: |
       global:
         clusterName: {{ .Context.cluster.name }}

@@ -47,22 +47,8 @@ components:
     dependsOn:
       - ingress
       - blockStorage
-    usage: |
-      {{ .Meta.componentRelease.name }} S3 server
-      <ul>
-      <li>
-      The Minio console can be accessed using <a href="{{ .Parameters.ingressName }}-console.{{ .Context.ingress.url }}">this link</a>
-      </li>
-      <li>
-      You can configure an admin alias for the 'mc' CLI with the following command:
-      <code>mc alias set {{ .Meta.componentRelease.name }} https://{{ .Parameters.ingressName }}.{{ .Context.ingress.url }} {{ .Parameters.rootUser }} {{ .Parameters.rootPassword }}</code>
-      </li>
-      {{- if .Parameters.ldap }}
-      <li>
-      This server is use LDAP authentication from '{{ .Parameters.ldap }}'
-      </li>
-      {{- end }}
-      </ul>
+    usage:
+      document: usage-component-minio-1.0.0
     values: |
       {{- if dig "kyverno" "namespace" "" .Context }}
       kyverno:
@@ -134,6 +120,25 @@ components:
 
 
 documents:
+
+  - name: usage-component-minio-1.0.0
+    text: |
+      {{ .Meta.componentRelease.name }} S3 server
+      <ul>
+      <li>
+      The Minio console can be accessed using <a href="{{ .Parameters.ingressName }}-console.{{ .Context.ingress.url }}">this link</a>
+      </li>
+      <li>
+      You can configure an admin alias for the 'mc' CLI with the following command:
+      <code>mc alias set {{ .Meta.componentRelease.name }} https://{{ .Parameters.ingressName }}.{{ .Context.ingress.url }} {{ .Parameters.rootUser }} {{ .Parameters.rootPassword }}</code>
+      </li>
+      {{- if .Parameters.ldap }}
+      <li>
+      This server is use LDAP authentication from '{{ .Parameters.ldap }}'
+      </li>
+      {{- end }}
+      </ul>
+
 
   - name: schema-parameters-component-minio-1.0.0
     yaml:
