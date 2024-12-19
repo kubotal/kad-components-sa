@@ -15,6 +15,7 @@ components:
         url: oci://quay.io/kubotal/charts/kad-webserver
         interval: 1m
     parameters:
+      ssl: true
       debug: false
       replicaCount: 2
       deploymentLocation: # TBD
@@ -32,7 +33,10 @@ components:
         host: kad.{{ .Context.ingress.url }}
       webConfig:
         server:
-          certificateIssuer: {{ .Context.certificateIssuer.public }} 
+          ssl: {{ .Parameters.ssl }}
+          {{- if .Parameters.ssl }}
+          certificateIssuer: {{ .Context.certificateIssuer.public }}
+          {{- end }}
         gitGateway:
           deploymentLocation: {{ .Parameters.deploymentLocation }}
       {{- if .Parameters.debug }}
@@ -52,6 +56,9 @@ documents:
       required:
         - deploymentLocation
       properties:
+        ssl:
+          type: boolean
+          default: true
         debug:
           type: boolean
           default: false
