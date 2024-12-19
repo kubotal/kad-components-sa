@@ -28,10 +28,11 @@ components:
       - ingress
     values: |
       replicaCount: {{ .Parameters.replicaCount }}
-      clusterIssuer: {{ .Context.certificateIssuer.public }}
       ingress:
         host: kad.{{ .Context.ingress.url }}
       webConfig:
+        server:
+          certificateIssuer: {{ .Context.certificateIssuer.public }} 
         gitGateway:
           deploymentLocation: {{ .Parameters.deploymentLocation }}
       {{- if .Parameters.debug }}
