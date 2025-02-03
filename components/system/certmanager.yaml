@@ -99,8 +99,6 @@ documents:
                 additionalProperties: false
                 required:
                   - name
-                  - ca_crt
-                  - ca_key
                 properties:
                   name:
                     type: string

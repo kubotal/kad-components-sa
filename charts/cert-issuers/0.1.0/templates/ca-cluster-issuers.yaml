@@ -1,5 +1,5 @@
 
-{{- range .Values.caClusterIssuers }}
+{{- range .Values.caClusterIssuers }
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
