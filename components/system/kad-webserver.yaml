@@ -5,9 +5,7 @@ components:
     version: 1.0.0
     protected: true
     source:
-      defaultVersion: 0.6.0-snapshot
-      allowedVersions:
-        - 0.6.0-snapshot
+      defaultVersion: 0.6.0
       ociRepository:
         url: oci://quay.io/kubotal/charts/kad-webserver
         interval: 1m
